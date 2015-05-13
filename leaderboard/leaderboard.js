@@ -38,16 +38,15 @@ if (Meteor.isClient) {
     },
     'click .increment' : function() {
       var selectedPlayer = Session.get('selectedPlayer');
-//      PlayerList.update(selectedPlayer, { $set : {score:5} });
-      PlayerList.update(selectedPlayer, { $inc : {score:5} });
+      Meteor.call('modifyPlayerScore', selectedPlayer, 5);
     },
     'click .decrement' : function() {
       var selectedPlayer = Session.get("selectedPlayer");
-      PlayerList.update(selectedPlayer, { $inc : {score:-5} });
+      Meteor.call('modifyPlayerScore', selectedPlayer, -5);
     },
     'click .remove' : function() {
       var selectedPlayer = Session.get('selectedPlayer');
-      PlayerList.remove(selectedPlayer);
+      Meteor.call('removePlayerData', selectedPlayer)
     }
   })
 
@@ -56,13 +55,8 @@ if (Meteor.isClient) {
     'submit form' : function(event) {
       event.preventDefault();
       var playerNameVar = event.target.playerName.value;
-      var currentUserId = Meteor.userId();
-      //console.log("event type : " + event.type + ", name : " + playerNameVar);
-      PlayerList.insert({
-        name : playerNameVar,
-        score : 0,
-        createdBy : currentUserId
-      })
+
+      Meteor.call('insertPlayerData', playerNameVar);
     }
   });
 
@@ -71,6 +65,23 @@ if (Meteor.isClient) {
 if (Meteor.isServer) {
   Meteor.startup(function () {
     // code to run on server at startup
+  });
+
+  Meteor.methods({
+    insertPlayerData : function(playerNameVar) {
+      var currentUserId = Meteor.userId();
+      PlayerList.insert({
+        name : playerNameVar,
+        score : 0,
+        createdBy : currentUserId
+      });
+    },
+    removePlayerData : function(selectedPlayer) {
+      PlayerList.remove( selectedPlayer );
+    },
+    modifyPlayerScore : function(selectedPlayer, scoreValue) {
+      PlayerList.update(selectedPlayer, {$inc : {score: scoreValue}});
+    }
   });
 }
 
@@ -112,3 +123,6 @@ if (Meteor.isServer) {
 //
 // chapter 11.
 // meteor remove autopublish
+//
+// chapter 12.
+// meteor remove insecure
