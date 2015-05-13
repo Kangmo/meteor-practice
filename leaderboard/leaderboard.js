@@ -1,10 +1,13 @@
+PlayerList = new Mongo.Collection('players');
+//UserAccounts = new Mongo.Collection('users');
+
 if (Meteor.isClient) {
 
   Template.leaderboard.helpers( {
     'player' : function() {
       var currentUserId = Meteor.userId();
       return PlayerList.find(
-        {createdBy: currentUserId},
+        {},
         {sort : {score:-1, name: 1}}
       );
     },
@@ -72,17 +75,19 @@ if (Meteor.isServer) {
 }
 
 if (Meteor.isClient) {
+  Meteor.subscribe('thePlayers');
   console.log("Hello World on the client side.");
 }
 
 if (Meteor.isServer) {
+  Meteor.publish('thePlayers', function(){
+    var currentUserId = this.userId;
+    return PlayerList.find({createdBy : currentUserId});
+//    return PlayerList.find();
+  });
+
   console.log("Hello World on the server side.");
 }
-
-PlayerList = new Mongo.Collection('players');
-//UserAccounts = new Mongo.Collection('users');
-
-
 
 
 // Following code was tested on JavaScript Console.
@@ -104,3 +109,6 @@ PlayerList = new Mongo.Collection('players');
 // meteor add accounts-ui
 // (After CTRL+C),
 // meteor reset
+//
+// chapter 11.
+// meteor remove autopublish
