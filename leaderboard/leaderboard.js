@@ -2,7 +2,11 @@ if (Meteor.isClient) {
 
   Template.leaderboard.helpers( {
     'player' : function() {
-      return PlayerList.find({}, {sort : {score:-1}});
+      var currentUserId = Meteor.userId();
+      return PlayerList.find(
+        {createdBy: currentUserId},
+        {sort : {score:-1, name: 1}}
+      );
     },
     'selectedClass' : function() {
       var playerId = this._id;
@@ -49,10 +53,12 @@ if (Meteor.isClient) {
     'submit form' : function(event) {
       event.preventDefault();
       var playerNameVar = event.target.playerName.value;
+      var currentUserId = Meteor.userId();
       //console.log("event type : " + event.type + ", name : " + playerNameVar);
       PlayerList.insert({
         name : playerNameVar,
-        score : 0
+        score : 0,
+        createdBy : currentUserId
       })
     }
   });
@@ -74,10 +80,27 @@ if (Meteor.isServer) {
 }
 
 PlayerList = new Mongo.Collection('players');
+//UserAccounts = new Mongo.Collection('users');
+
 
 
 
 // Following code was tested on JavaScript Console.
+//
 // PlayerList.insert( { name : "David", score : 0} );
 // PlayerList.find().fetch();
 // PlayerList.find().count();
+//
+// chapter 10.
+// Meteor.users.find().fetch();
+//
+
+// Commands typed
+// chapter 3.
+// meteor create leaderboard
+//
+// chapter 10.
+// meteor add accounts-password
+// meteor add accounts-ui
+// (After CTRL+C),
+// meteor reset

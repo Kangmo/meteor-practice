@@ -12,6 +12,8 @@
 
 <template name="leaderboard">
   <ul>
+    {{> loginButtons}}
+
     {{#each player}}
       <li class="player {{selectedClass}}"> {{name}} : {{score}} </li>
     {{/each}}
@@ -28,8 +30,10 @@
 
 
 <template name="addPlayerForm">
-  <form>
-    <input type="text" name="playerName">
-    <input type="submit" value="Add Player">
-  </form>
+  {{#if currentUser}}
+    <form>
+      <input type="text" name="playerName">
+      <input type="submit" value="Add Player">
+    </form>
+  {{/if}}
 </template>
