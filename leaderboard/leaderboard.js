@@ -23,3 +23,10 @@ if (Meteor.isServer) {
 }
 
 console.log("Hello World");
+
+PlayerList = new Mongo.Collection('players');
+
+// Following code was tested on JavaScript Console.
+// PlayerList.insert( { name : "David", score : 0} );
+// PlayerList.find().fetch();
+// PlayerList.find().count();
