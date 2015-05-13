@@ -1,21 +1,4 @@
 if (Meteor.isClient) {
-  // counter starts at 0
-  Session.setDefault('counter', 0);
-
-/*
-  Template.hello.helpers({
-    counter: function () {
-      return Session.get('counter');
-    }
-  });
-
-  Template.hello.events({
-    'click button': function () {
-      // increment the counter when button is clicked
-      Session.set('counter', Session.get('counter') + 1);
-    }
-  });
-*/
 
   Template.leaderboard.helpers( {
     'player' : function() {
@@ -23,8 +6,18 @@ if (Meteor.isClient) {
     }
   });
 
-
-}
+  Template.leaderboard.events( {
+    'click' : function() {
+      return console.log("You clicked something.");
+    },
+    'click li' : function() {
+      console.log("You clicked an li element.");
+    },
+    'click .player' : function() {
+      console.log("You clicked a .player element.");
+    }
+  })
+ }
 
 if (Meteor.isServer) {
   Meteor.startup(function () {
