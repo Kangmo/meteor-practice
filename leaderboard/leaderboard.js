@@ -36,9 +36,27 @@ if (Meteor.isClient) {
     },
     'click .decrement' : function() {
       var selectedPlayer = Session.get("selectedPlayer");
-      PlayerList.update(selectedPlayer, { $dec : {score:5} });
+      PlayerList.update(selectedPlayer, { $inc : {score:-5} });
+    },
+    'click .remove' : function() {
+      var selectedPlayer = Session.get('selectedPlayer');
+      PlayerList.remove(selectedPlayer);
     }
   })
+
+
+  Template.addPlayerForm.events({
+    'submit form' : function(event) {
+      event.preventDefault();
+      var playerNameVar = event.target.playerName.value;
+      //console.log("event type : " + event.type + ", name : " + playerNameVar);
+      PlayerList.insert({
+        name : playerNameVar,
+        score : 0
+      })
+    }
+  });
+
  }
 
 if (Meteor.isServer) {
